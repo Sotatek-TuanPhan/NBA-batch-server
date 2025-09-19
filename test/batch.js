@@ -6,6 +6,7 @@ const path = require('path');
 const standings = require('./standings');
 const { expect } = require('chai');
 const gameSchedulesTest = require('./game_schedules');
+const leadersTest = require('./leaders');
 
 let testServer;
 
@@ -58,6 +59,11 @@ describe('app.js', () => {
     await context.store.repository.GamePlayerStats.masterModel.sync({ force: true });
     await context.store.repository.GameTeamStats.masterModel.sync({ force: true });
 
+    // Leaders table (if available)
+    if (context.store.repository.Leaders) {
+      await context.store.repository.Leaders.masterModel.sync({ force: true });
+    }
+
     // テスト用のRSS設定を追加
     await context.store.repository.IntegrationSettings.createRssSetting({
       setting_key: 'test_rss',
@@ -101,8 +107,6 @@ describe('app.js', () => {
         teams: await context.store.repository.Teams.masterModel.count(),
         teamStats: await context.store.repository.TeamStats.masterModel.count(),
         teamMatchResults: await context.store.repository.TeamMatchResults.masterModel.count(),
-        schedules: await context.store.repository.Schedule.masterModel.count(),
-        standings: await context.store.repository.Standings.masterModel.count(),
       };
 
       console.log('\n📊 === DATABASE RECORD COUNTS ===');
@@ -133,14 +137,19 @@ describe('app.js', () => {
       }
     });
 
-    // it('Insert data standings to DB', async () => {
-    //   const result = await standings.testStandingsWithDB();
-    //   expect(result.success).to.be.true;
-    // });
+    it('Insert data standings to DB', async () => {
+      const result = await standings.testStandingsWithDB();
+      expect(result.success).to.be.true;
+    });
 
-    // it('Insert game schedules to DB', async () => {
-    //   const result = await gameSchedulesTest.testGameSchedulesWithDB();
-    //   expect(result.success).to.be.true;
-    // });
+    it('Insert game schedules to DB', async () => {
+      const result = await gameSchedulesTest.testGameSchedulesWithDB();
+      expect(result.success).to.be.true;
+    });
+
+    it('Insert leaders to DB', async () => {
+      const result = await leadersTest.testLeadersWithDB();
+      expect(result.success).to.be.true;
+    });
   });
 });

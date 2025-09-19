@@ -6,6 +6,7 @@ const getGameDetail = require('./get_game_detail');
 const getTournament = require('./get_tournament');
 const getPlayerDetail = require('./get_player_detail');
 const getTeams = require('./get_teams');
+const getLeaders = require('./get_leader');
 
 module.exports = {
   getData: getData,
@@ -16,4 +17,5 @@ module.exports = {
   getTournament: getTournament,
   getPlayerDetail: getPlayerDetail,
   getTeams: getTeams,
+  getLeaders: getLeaders,
 };

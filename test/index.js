@@ -43,6 +43,7 @@ const initSequelizeModels = () => {
     Schedule: 'schedule',
     TeamStats: 'team_stats',
     TeamMatchResults: 'team_match_results',
+    Leaders: 'leaders',
   };
 
   const setModifiedModel = (modelName) => {
@@ -97,6 +98,7 @@ const applyMock = async () => {
     Player: 'player',
     Standings: 'standings',
     Schedule: 'schedule',
+    Leaders: 'leaders',
   };
 
   // モデルをSequelizeに登録

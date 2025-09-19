@@ -1,6 +1,5 @@
 const app = require('./main/app');
 const mainSrc = require('./main/index');
-const express = require('express');
 
 /**
  * メイン処理
@@ -39,6 +38,10 @@ const main = async (event, lambdaContext) => {
       // Kyodo Teams API データ取得処理
       await mainSrc.kyodo.getTeams.kyodoTeamsApi();
       break;
+    case 'leaders':
+      console.log('Processing leaders data...');
+      await mainSrc.kyodo.getLeaders.getLeaders();
+      break;
     default:
       console.log('Processing default batch...');
       await mainSrc.kyodo.getData.main();
@@ -49,20 +52,4 @@ const main = async (event, lambdaContext) => {
 module.exports = {
   main: main,
 };
-const server = express();
 
-server.use(express.json());
-
-server.get('/start', async (req, res) => {
-  try {
-    await main(req.body);
-    res.status(200).send('Process started successfully');
-  } catch (error) {
-    res.status(500).send('Error starting process: ' + error.message);
-  }
-});
-
-const PORT = 3000;
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
