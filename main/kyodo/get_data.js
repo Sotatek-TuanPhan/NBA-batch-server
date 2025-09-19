@@ -226,12 +226,52 @@ const kyodoTeamsApi = async () => {
       // 各チームとプレイヤーを並行して処理
       let totalTeamsProcessed = 0;
       let totalPlayersProcessed = 0;
+      let totalTeamStatsProcessed = 0;
+      let totalMatchResultsProcessed = 0;
 
       for (const teamData of teamsData) {
         try {
           // チームを保存（リポジトリ内でマッピング）
           await context.store.repository.Teams.saveTeamFromApi(teamData);
           totalTeamsProcessed++;
+
+          // チーム統計データを処理
+          if (teamData.statistics && teamData.statistics.season && teamData.statistics.season.length > 0) {
+            try {
+              const statsResults = await context.store.repository.TeamStats.saveMultipleTeamStatsFromApi(
+                  teamData.statistics.season,
+                  teamData.team_id,
+              );
+              totalTeamStatsProcessed += statsResults.length;
+              console.log(`チーム統計保存完了: ${teamData.team_name} (${statsResults.length}シーズン)`);
+            } catch (error) {
+              console.error(`チーム統計保存エラー (${teamData.team_name}):`, error);
+              // エラーが発生しても他の処理は続行
+            }
+          }
+
+          // チーム対戦結果データを処理
+          if (teamData.match_results && teamData.match_results.length > 0) {
+            try {
+              // 各統計シーズンデータからleagueとseason情報を取得
+              if (teamData.statistics && teamData.statistics.season && teamData.statistics.season.length > 0) {
+                for (const seasonData of teamData.statistics.season) {
+                  const matchResultsForSeason = await context.store.repository.TeamMatchResults.saveMultipleMatchResultsFromApi(
+                      teamData.match_results,
+                      teamData.team_id,
+                      seasonData.league,
+                      seasonData.season_year,
+                      seasonData.season_type,
+                  );
+                  totalMatchResultsProcessed += matchResultsForSeason.length;
+                }
+                console.log(`チーム対戦結果保存完了: ${teamData.team_name} (${teamData.match_results.length}対戦相手)`);
+              }
+            } catch (error) {
+              console.error(`チーム対戦結果保存エラー (${teamData.team_name}):`, error);
+              // エラーが発生しても他の処理は続行
+            }
+          }
 
           // プレイヤーデータを並行処理
           if (teamData.players && teamData.players.length > 0) {
@@ -260,11 +300,10 @@ const kyodoTeamsApi = async () => {
         }
       }
 
-      console.log('チーム・プレイヤーデータ保存完了');
-      console.log(`処理完了: ${totalTeamsProcessed}チーム, ${totalPlayersProcessed}プレイヤー`);
+      console.log('チーム・プレイヤー・統計・対戦結果データ保存完了');
+      console.log(`処理完了: ${totalTeamsProcessed}チーム, ${totalPlayersProcessed}プレイヤー, ${totalTeamStatsProcessed}チーム統計, ${totalMatchResultsProcessed}対戦結果`);
     } catch (error) {
       console.error(`チーム処理エラー: ${error}`);
-      // エラーが発生しても処理は続行可能
     }
 
     console.log('=== Kyodo Teams API データ取得処理完了 ===');

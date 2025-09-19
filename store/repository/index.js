@@ -22,6 +22,8 @@ class Repository {
       TournamentMatches: 'tournament_matches',
       Player: 'player',
       Teams: 'teams',
+      TeamStats: 'team_stats',
+      TeamMatchResults: 'team_match_results',
       League: 'league',
       Standings: 'standings',
       Schedule: 'schedule',

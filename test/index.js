@@ -41,6 +41,8 @@ const initSequelizeModels = () => {
     League: 'league',
     Standings: 'standings',
     Schedule: 'schedule',
+    TeamStats: 'team_stats',
+    TeamMatchResults: 'team_match_results',
   };
 
   const setModifiedModel = (modelName) => {

@@ -99,6 +99,8 @@ describe('app.js', () => {
         tournamentMatches: await context.store.repository.TournamentMatches.masterModel.count(),
         players: await context.store.repository.Player.masterModel.count(),
         teams: await context.store.repository.Teams.masterModel.count(),
+        teamStats: await context.store.repository.TeamStats.masterModel.count(),
+        teamMatchResults: await context.store.repository.TeamMatchResults.masterModel.count(),
       };
 
       console.log('\n📊 === DATABASE RECORD COUNTS ===');
@@ -112,6 +114,8 @@ describe('app.js', () => {
       console.log(`Tournament Matches: ${counts.tournamentMatches}`);
       console.log(`Players: ${counts.players}`);
       console.log(`Teams: ${counts.teams}`);
+      console.log(`Team Stats: ${counts.teamStats}`);
+      console.log(`Team Match Results: ${counts.teamMatchResults}`);
       console.log('===================================\n');
 
       // Verify data was added
