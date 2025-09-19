@@ -9,4 +9,5 @@ module.exports = {
       logging: false,
     },
   },
+  kyodo_base_url: 'https://basket.sports-digican.com/nba/contents/json',
 };

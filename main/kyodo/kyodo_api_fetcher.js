@@ -72,27 +72,51 @@ class KyodoApiFetcher {
    * @param {string} url - API endpoint URL
    * @returns {Promise<Object>} Decoded JSON data
    */
-  static async fetchData(url) {
-    try {
-      console.log(`Fetching data: ${url}`);
+  static async fetchData(url, maxRetries = 3) {
+    let lastError = null;
 
-      const responseData = await this.makeHttpRequest(url);
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      const schema = url.split('/').pop().split('.').shift();
 
-      // Validate response structure
-      if (!responseData || typeof responseData.content !== 'string') {
-        throw new Error('Invalid response structure: missing or invalid content field');
+      console.log(`Starting fetch ${schema} schema attempt ${attempt}/${maxRetries}`);
+
+      try {
+        console.log(`Fetching data: ${url}`);
+
+        const responseData = await this.makeHttpRequest(url);
+
+        // Validate response structure
+        if (!responseData || typeof responseData.content !== 'string') {
+          throw new Error('Invalid response structure: missing or invalid content field');
+        }
+
+        // Decode base64 content and return directly
+        const decodedData = this.decodeBase64Json(responseData.content);
+
+        console.log(`Data fetched successfully from ${url}`);
+        return {data: decodedData, attempt: attempt};
+      } catch (error) {
+        lastError = error;
+        console.error(`Attempt ${attempt} failed:`, error.message);
+
+        if (attempt < maxRetries) {
+          const delay = Math.pow(2, attempt) * 1000; // 指数バックオフ
+          console.log(`Retrying in ${delay}ms...`);
+          await sleep(delay);
+        }
       }
-
-      // Decode base64 content and return directly
-      const decodedData = this.decodeBase64Json(responseData.content);
-
-      console.log(`Data fetched successfully from ${url}`);
-      return decodedData;
-    } catch (error) {
-      console.error(`Data fetch error (${url}):`, error);
-      throw error;
     }
+    console.error('All retry attempts failed:', lastError.message);
   }
+}
+
+/**
+ * Sleep for specified milliseconds
+ * @param {number} ms - Milliseconds to sleep
+ * @return {Promise} - Promise that resolves after the specified time
+ */
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 module.exports = KyodoApiFetcher;

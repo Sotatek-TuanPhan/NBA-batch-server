@@ -10,8 +10,10 @@
   "dependencies": {
     "chai": "^4.3.7",
     "dotenv": "^17.2.1",
+    "express": "^5.1.0",
     "mout": "^1.2.4",
     "mysql2": "^3.14.1",
+    "node-fetch": "^3.3.2",
     "rss-parser": "^3.13.0",
     "sequelize": "^6.37.7",
     "uuid": "^11.1.0"
@@ -31,6 +33,7 @@
     "test": "cross-env SERVICE_ENV=test mocha --timeout 60000 --reporter spec --recursive test --exit",
     "autotest": "nodemon --exec \"npm run test\"",
     "test-server": "node test/server.js",
-    "build": "npx tsc"
+    "build": "npx tsc",
+    "dev": " cross-env SERVICE_ENV=dev node ./app.js"
   }
 }

@@ -1,11 +1,9 @@
-const {forOwn} = require('mout/object');
+const { forOwn } = require('mout/object');
 
 const fixtureNames = [
   require('./game'),
   require('./news'),
   require('./integration_settings'),
-  require('./teams'),
-  require('./players'),
 ];
 
 const fixtures = [];

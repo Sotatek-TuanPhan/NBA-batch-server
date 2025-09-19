@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Game = sequelize.define('game', {
+  const Game = sequelize.define('games', {
     id: {
       type: DataTypes.BIGINT.UNSIGNED,
       allowNull: false,
@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     game_id: {
       type: DataTypes.BIGINT,
       allowNull: false,
+      unique: true,
     },
     league_id: {
       type: DataTypes.BIGINT,
@@ -27,15 +28,15 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     season_type: {
-      type: DataTypes.STRING(16),
+      type: DataTypes.STRING,
       allowNull: false,
     },
     game_reference: {
-      type: DataTypes.STRING(64),
+      type: DataTypes.STRING,
       allowNull: true,
     },
     game_status: {
-      type: DataTypes.STRING(32),
+      type: DataTypes.STRING,
       allowNull: true,
     },
     game_quarter: {
@@ -43,11 +44,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     game_quarter_time_left: {
-      type: DataTypes.STRING(12),
+      type: DataTypes.STRING,
       allowNull: true,
     },
     game_title: {
-      type: DataTypes.STRING(255),
+      type: DataTypes.STRING,
       allowNull: true,
     },
     scheduled_dt: {
@@ -96,39 +97,39 @@ module.exports = (sequelize, DataTypes) => {
     },
   },
   {
-    modelName: 'game',
+    modelName: 'games',
     tableName: 'games',
     timestamps: true,
     underscored: true,
     indexes: [
       {
+        name: 'ux_games_game_id',
         unique: true,
         fields: ['game_id'],
-        name: 'ux_games_game_id',
       },
       {
-        fields: ['league_id'],
         name: 'idx_games_league_id',
+        fields: ['league_id'],
       },
       {
-        fields: ['home_team_id'],
         name: 'idx_games_home_team_id',
+        fields: ['home_team_id'],
       },
       {
-        fields: ['away_team_id'],
         name: 'idx_games_away_team_id',
+        fields: ['away_team_id'],
       },
       {
-        fields: ['scheduled_dt'],
         name: 'idx_games_scheduled_dt',
+        fields: ['scheduled_dt'],
       },
       {
-        fields: ['game_status'],
         name: 'idx_games_game_status',
+        fields: ['game_status'],
       },
       {
-        fields: ['season_year', 'season_type'],
         name: 'idx_games_season',
+        fields: ['season_year', 'season_type'],
       },
     ],
   });

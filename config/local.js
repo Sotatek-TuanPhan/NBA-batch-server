@@ -2,7 +2,7 @@ module.exports = {
   stores: {
     master: {
       dialect: 'sqlite',
-      storage: ':memory:',
+      storage: 'local_database.sqlite',
       logging: false,
     },
   },
