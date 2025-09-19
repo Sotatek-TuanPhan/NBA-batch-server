@@ -23,6 +23,8 @@ class Repository {
       Player: 'player',
       Teams: 'teams',
       League: 'league',
+      Standings: 'standings',
+      Schedule: 'schedule',
     };
 
     await this.setupModel(models, context.store.repository, context.store.sequelizeMaster);

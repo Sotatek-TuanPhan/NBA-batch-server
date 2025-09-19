@@ -2,11 +2,13 @@ module.exports = {
   stores: {
     master: {
       dialect: 'mysql',
-      host: 'ny-aurora-mysql-dev.cluster-cxckia84oela.ap-northeast-1.rds.amazonaws.com',
-      username: 'docomo_ny',
-      password: process.env.MYSQL_USER_PASSWORD,
+      host: 'localhost',
+      port: 3306,
+      username: 'strapi',
+      password: 'strapi',
       database: 'docomo_ny_development',
       logging: false,
     },
   },
+  kyodo_base_url: 'https://test-basket.sports-digican.com/nba/contents/json/scenario',
 };

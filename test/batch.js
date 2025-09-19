@@ -3,6 +3,9 @@ const context = require('../main/context');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const standings = require('./standings');
+const { expect } = require('chai');
+const gameSchedulesTest = require('./game_schedules');
 
 let testServer;
 
@@ -18,9 +21,9 @@ describe('app.js', () => {
             res.end('Internal Server Error');
             return;
           }
-          res.writeHead(200, { 
+          res.writeHead(200, {
             'Content-Type': 'application/xml; charset=utf-8',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': '*',
           });
           res.end(data);
         });
@@ -40,7 +43,7 @@ describe('app.js', () => {
 
     // テスト環境での初期化
     await context.init();
-    
+
     // リポジトリの初期化後にテーブルを同期
     await context.store.repository.News.masterModel.sync({ force: true });
     await context.store.repository.IntegrationSettings.masterModel.sync({ force: true });
@@ -54,7 +57,7 @@ describe('app.js', () => {
     await context.store.repository.GameTimelines.masterModel.sync({ force: true });
     await context.store.repository.GamePlayerStats.masterModel.sync({ force: true });
     await context.store.repository.GameTeamStats.masterModel.sync({ force: true });
-    
+
     // テスト用のRSS設定を追加
     await context.store.repository.IntegrationSettings.createRssSetting({
       setting_key: 'test_rss',
@@ -78,13 +81,12 @@ describe('app.js', () => {
 
   describe('main', () => {
     it('処理が成功すること', async () => {
-      await app.main({hoge: 'puge'});
+      await app.main({ hoge: 'puge' });
     });
-
     it('データがDBに正常に保存されること', async () => {
       // Run the main process
-      await app.main({test: 'data'});
-      
+      await app.main({ test: 'data' });
+
       // Count records in each table
       const counts = {
         news: await context.store.repository.News.masterModel.count(),
@@ -115,12 +117,22 @@ describe('app.js', () => {
       // Verify data was added
       const totalRecords = Object.values(counts).reduce((sum, count) => sum + count, 0);
       console.log(`✅ Total records in database: ${totalRecords}`);
-      
+
       if (totalRecords > 0) {
         console.log('🎉 SUCCESS: Data successfully added to database!');
       } else {
         console.log('⚠️  WARNING: No data was added to database');
       }
+    });
+
+    it('Insert data standings to DB', async () => {
+      const result = await standings.testStandingsWithDB();
+      expect(result.success).to.be.true;
+    });
+
+    it('Insert game schedules to DB', async () => {
+      const result = await gameSchedulesTest.testGameSchedulesWithDB();
+      expect(result.success).to.be.true;
     });
   });
 });
