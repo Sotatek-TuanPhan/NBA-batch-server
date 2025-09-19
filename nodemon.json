@@ -1,0 +1,4 @@
+{
+  "watch": ["main", "store", "test", "config"],
+  "ext": "js"
+}

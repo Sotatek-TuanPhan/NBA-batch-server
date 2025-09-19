@@ -1,0 +1,36 @@
+{
+  "name": "ny-batch-lambda",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "description": "ny-batch-lambda",
+  "main": "index.mjs",
+  "imports": {
+    "#context": "./main/context.js"
+  },
+  "dependencies": {
+    "chai": "^4.3.7",
+    "dotenv": "^17.2.1",
+    "mout": "^1.2.4",
+    "mysql2": "^3.14.1",
+    "rss-parser": "^3.13.0",
+    "sequelize": "^6.37.7",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.0.0",
+    "eslint": "^9.33.0",
+    "eslint-config-google": "^0.14.0",
+    "mocha": "^11.7.1",
+    "nodemon": "^3.1.10",
+    "sequelize-mocking": "^2.0.1",
+    "sinon": "^20.0.0",
+    "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "test": "cross-env SERVICE_ENV=test mocha --timeout 60000 --reporter spec --recursive test --exit",
+    "autotest": "nodemon --exec \"npm run test\"",
+    "test-server": "node test/server.js",
+    "build": "npx tsc"
+  }
+}
