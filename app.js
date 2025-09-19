@@ -10,6 +10,11 @@ const main = async (event, lambdaContext) => {
   const batchType = event?.batchType || 'default';
 
   switch (batchType) {
+    case 'rss':
+      console.log('Processing RSS data...');
+      await mainSrc.kyodo.rssFetcher.main();
+      break;
+    // RSS取得処理
     case 'standings':
       console.log('Processing basketball standings...');
       await mainSrc.kyodo.getStandings.getStandings();
@@ -18,26 +23,21 @@ const main = async (event, lambdaContext) => {
       console.log('Processing game schedules...');
       await mainSrc.kyodo.getGameSchedules.getGameSchedules();
       break;
-    case 'rss':
-      console.log('Processing RSS data...');
-      await mainSrc.kyodo.rssFetcher.main();
-      break;
-    // RSS取得処理
     case 'game-details':
       // Kyodo Game Detail API データ取得処理
-      await mainSrc.kyodo.getData.kyodoGameDetailApi();
+      await mainSrc.kyodo.getGameDetail.kyodoGameDetailApi();
       break;
     // Kyodo Tournament API データ取得処理
     case 'tournament':
-      await mainSrc.kyodo.getData.kyodoTournamentApi();
+      await mainSrc.kyodo.getTournament.kyodoTournamentApi();
       break;
     case 'player-details':
       // Kyodo Player Detail API データ取得処理
-      await mainSrc.kyodo.getData.kyodoPlayerDetailApi();
+      await mainSrc.kyodo.getPlayerDetail.kyodoPlayerDetailApi();
       break;
     case 'teams':
       // Kyodo Teams API データ取得処理
-      await mainSrc.kyodo.getData.kyodoTeamsApi();
+      await mainSrc.kyodo.getTeams.kyodoTeamsApi();
       break;
     default:
       console.log('Processing default batch...');
