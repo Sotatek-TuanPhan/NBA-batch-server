@@ -85,7 +85,7 @@ describe('app.js', () => {
     });
     it('データがDBに正常に保存されること', async () => {
       // Run the main process
-      await app.main({ test: 'data' });
+      await app.main({ test: 'data', batchType: 'game-details' });
 
       // Count records in each table
       const counts = {
@@ -99,6 +99,10 @@ describe('app.js', () => {
         tournamentMatches: await context.store.repository.TournamentMatches.masterModel.count(),
         players: await context.store.repository.Player.masterModel.count(),
         teams: await context.store.repository.Teams.masterModel.count(),
+        teamStats: await context.store.repository.TeamStats.masterModel.count(),
+        teamMatchResults: await context.store.repository.TeamMatchResults.masterModel.count(),
+        schedules: await context.store.repository.Schedule.masterModel.count(),
+        standings: await context.store.repository.Standings.masterModel.count(),
       };
 
       console.log('\n📊 === DATABASE RECORD COUNTS ===');
@@ -112,6 +116,10 @@ describe('app.js', () => {
       console.log(`Tournament Matches: ${counts.tournamentMatches}`);
       console.log(`Players: ${counts.players}`);
       console.log(`Teams: ${counts.teams}`);
+      console.log(`Team Stats: ${counts.teamStats}`);
+      console.log(`Team Match Results: ${counts.teamMatchResults}`);
+      console.log(`Schedules: ${counts.schedules}`);
+      console.log(`Standings: ${counts.standings}`);
       console.log('===================================\n');
 
       // Verify data was added
@@ -125,14 +133,14 @@ describe('app.js', () => {
       }
     });
 
-    it('Insert data standings to DB', async () => {
-      const result = await standings.testStandingsWithDB();
-      expect(result.success).to.be.true;
-    });
+    // it('Insert data standings to DB', async () => {
+    //   const result = await standings.testStandingsWithDB();
+    //   expect(result.success).to.be.true;
+    // });
 
-    it('Insert game schedules to DB', async () => {
-      const result = await gameSchedulesTest.testGameSchedulesWithDB();
-      expect(result.success).to.be.true;
-    });
+    // it('Insert game schedules to DB', async () => {
+    //   const result = await gameSchedulesTest.testGameSchedulesWithDB();
+    //   expect(result.success).to.be.true;
+    // });
   });
 });
